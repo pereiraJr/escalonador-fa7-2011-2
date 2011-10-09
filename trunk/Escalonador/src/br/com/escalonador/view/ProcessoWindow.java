@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import br.com.escalonador.controller.Controller;
+import br.com.escalonador.controller.Observer;
 import br.com.escalonador.model.Prioridade;
 import br.com.escalonador.model.Processo;
 import br.com.escalonador.util.MessagesResource;
@@ -35,13 +36,15 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 	private JTextField qtdTempo;
 	private JButton btSalvar;
 	private JButton btCancelar;
-	private static Processo processo = null;
 	private Controller controller;
+	private Observer observer;
 	private static ProcessoWindow instance;
 	
 	private ProcessoWindow(){
 		setResizable(false);
 		controller = Controller.getInstance();
+		observer = Observer.getInstance();
+		observer.setProcessoWindow(this);
 		setSize(400, 200);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle(MessagesResource.getString("janela.processo.titulo"));
@@ -80,12 +83,13 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 		return mainPanel;
 	}
 
-	public static Processo getProcesso() {
-		if(instance ==null) {
-			instance = new ProcessoWindow();
-		}
-		instance.setVisible(true);
-		return processo;
+	public static ProcessoWindow getInstance() {
+	    instance = new ProcessoWindow();
+		return instance;
+	}
+	
+	public Processo getProcesso(){
+		return new Processo(controller.getPid(), Long.valueOf(qtdTempo.getText()),  Integer.valueOf(qtdMenmoria.getText()), Prioridade.BAIXA);
 	}
 
 	/* (non-Javadoc)
@@ -95,18 +99,17 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btSalvar) {
 			if(isCamposValidos()){
-				processo = new Processo(controller.getPid(), Long.valueOf(qtdTempo.getText()),  Integer.valueOf(qtdMenmoria.getText()), Prioridade.BAIXA);
+				observer.addProcesso();
 			}
 		}
 		if(e.getSource() == btCancelar) {
-			processo = null;
-			this.dispose();
+			observer.closeProcessoWindow();
 		}
 	}
 
 	private boolean isCamposValidos() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 	

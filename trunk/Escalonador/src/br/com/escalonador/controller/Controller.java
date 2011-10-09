@@ -3,6 +3,8 @@ package br.com.escalonador.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JRadioButton;
+
 import br.com.escalonador.model.Processo;
 import br.com.escalonador.model.TipoEscalonamento;
 
@@ -11,6 +13,7 @@ public class Controller {
 	private static Controller controller =null;
 	private TipoEscalonamento tipoEscalonamento;
 	private List<Processo> listProcessos;
+	private int pidCounter = 0;
 	
 	/**
 	 * Construtor.
@@ -73,27 +76,27 @@ public class Controller {
 		}
 	}
 	
-	public String[][] getLinhasTabela(){
-		String[][] linhas = null;
+	public Object[][] getLinhasTabela(){
+		Object[][] linhas = null;
 		if(!listProcessos.isEmpty()) {
-			linhas = new String[listProcessos.size()][4];
+			linhas = new Object[listProcessos.size()][5];
 			for(int i=0; i<listProcessos.size(); i++) {
 				Processo p = listProcessos.get(i);
-				linhas[i][0] = String.valueOf(p.getPid());
-				linhas[i][1] = String.valueOf(p.getTamanhoMemoria());
-				linhas[i][2] = String.valueOf(p.getTempoProcessamento());
-				linhas[i][3] = p.getPrioridade().name();
+				linhas[i][0] = new JRadioButton();
+				linhas[i][1] = String.valueOf(p.getPid());
+				linhas[i][2] = String.valueOf(p.getTamanhoMemoria());
+				linhas[i][3] = String.valueOf(p.getTempoProcessamento());
+				linhas[i][4] = p.getPrioridade().name();
 			}
 		}
 		else {
-			linhas = new String[4][4];
+			linhas = new Object[4][5];
 		}
 		return linhas;
 	}
 
 	public int getPid() {
-		// TODO Auto-generated method stub
-		return 0;
+		return pidCounter++;
 	}
 
 }

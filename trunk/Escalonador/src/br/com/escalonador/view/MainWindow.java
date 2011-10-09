@@ -8,8 +8,8 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
+import br.com.escalonador.controller.Observer;
 import br.com.escalonador.util.MessagesResource;
 
 /**
@@ -20,8 +20,11 @@ import br.com.escalonador.util.MessagesResource;
 public class MainWindow extends JFrame {
 	
 	private static final long serialVersionUID = -1470223680745055236L;
+	private Observer observer;
 
 	public MainWindow() {
+		observer = Observer.getInstance();
+		observer.setMainWindow(this);
 		setResizable(false);
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -31,6 +34,11 @@ public class MainWindow extends JFrame {
 		add(new Menu(), BorderLayout.NORTH);
 		add(new MainPainel(), BorderLayout.CENTER);
 		setVisible(true);
+	}
+	
+	public void atualizarPainel(){
+		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
+		mainPainel.repaint();
 	}
 	
 	public static void main(String[] args) {
