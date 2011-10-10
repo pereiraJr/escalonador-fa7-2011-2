@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
 	
 	public void atualizarPainel(){
 		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
-		mainPainel.repaint();
+		mainPainel.atualizarPainel();
 	}
 	
 	public static void main(String[] args) {

@@ -71,6 +71,9 @@ public class Observer {
 		mainWindow.dispose();
 	}
 	
-	
+	public void removerProcesso(int index) {
+		controller.removerProcesso(index);
+		mainWindow.atualizarPainel();
+	}
 
 }

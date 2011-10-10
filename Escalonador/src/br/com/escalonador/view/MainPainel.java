@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -24,6 +25,7 @@ import br.com.escalonador.util.MessagesResource;
 public class MainPainel extends JPanel {
 
 	private static final long serialVersionUID = 1941367165748667283L;
+	private static final int OPCAO_SIM = 0; 
 	private JTabbedPane abaPane;
 	private JButton btSuperNovo;
 	private JButton btInferNovo ;
@@ -32,6 +34,7 @@ public class MainPainel extends JPanel {
 	private JButton btSuperExcluir;
 	private JButton btInferExcluir;
 	private JPanel painelProcessos;
+	private JTable jtable; 
 
 	/**
 	 * Construtor.
@@ -40,17 +43,15 @@ public class MainPainel extends JPanel {
 		super();
 		setLayout(new BorderLayout());
 		add(getManiPainel(), BorderLayout.CENTER);
-//		add(getPanel(), BorderLayout.EAST);
-//		add(getPanel(), BorderLayout.WEST);
 		setVisible(true);
 	}
 	
-	public void repaint(){
+	public void atualizarPainel(){
+		setVisible(false);
 		this.removeAll();
 		setLayout(new BorderLayout());
 		add(getManiPainel(), BorderLayout.CENTER);
-//		add(getPanel(), BorderLayout.EAST);
-//		add(getPanel(), BorderLayout.WEST);
+		setVisible(true);
 	}
 
 	private JTabbedPane getManiPainel() {
@@ -108,6 +109,7 @@ public class MainPainel extends JPanel {
 		return painelBotoes;
 	}
 
+	@SuppressWarnings("serial")
 	private JScrollPane getTabelaProcessos() {
 		JScrollPane jScrollPane;
 		String[] nomeColunas = {
@@ -118,8 +120,7 @@ public class MainPainel extends JPanel {
 				MessagesResource.getString("janela.aba.processos.tabela.prioridade")
 				};
 		DefaultTableModel tableModel = new DefaultTableModel(Controller.getInstance().getLinhasTabela(), nomeColunas);
-		@SuppressWarnings("serial")
-		JTable jtable = new JTable(tableModel) {
+		jtable = new JTable(tableModel) {
 		      public void tableChanged(TableModelEvent e) {
 		          super.tableChanged(e);
 		          repaint();
@@ -171,7 +172,11 @@ public class MainPainel extends JPanel {
 
 			}
 			if (e.getSource() == btSuperExcluir || e.getSource() == btInferExcluir) {
-
+				int index = jtable.getSelectedRow();
+				int confirmacao = JOptionPane.showConfirmDialog(null, MessagesResource.getString("janela.confima.exclusao.texto"), MessagesResource.getString("janela.confima.exclusao.titulo"), JOptionPane.YES_NO_OPTION);
+				if(confirmacao == OPCAO_SIM) {
+					Observer.getInstance().removerProcesso(index);
+				}
 			}
 		}
 
