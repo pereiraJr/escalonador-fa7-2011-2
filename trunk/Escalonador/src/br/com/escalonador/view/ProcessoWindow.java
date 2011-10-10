@@ -89,7 +89,10 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 	}
 	
 	public Processo getProcesso(){
-		return new Processo(controller.getPid(), Long.valueOf(qtdTempo.getText()),  Integer.valueOf(qtdMenmoria.getText()), Prioridade.BAIXA);
+//		Prioridade prioridade = null;
+//		String selectedIndex = (String)cbPrioridade.getSelectedItem();
+//		prioridade = Prioridade.valueOf(selectedIndex);
+		return new Processo(controller.getPid(), Long.valueOf(qtdTempo.getText()),  Integer.valueOf(qtdMenmoria.getText()), (Prioridade)cbPrioridade.getSelectedItem());
 	}
 
 	/* (non-Javadoc)

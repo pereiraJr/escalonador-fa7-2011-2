@@ -76,6 +76,10 @@ public class Controller {
 		}
 	}
 	
+	public void removerProcesso(int index) {
+		listProcessos.remove(index);
+	}
+	
 	public Object[][] getLinhasTabela(){
 		Object[][] linhas = null;
 		if(!listProcessos.isEmpty()) {
@@ -88,9 +92,6 @@ public class Controller {
 				linhas[i][3] = String.valueOf(p.getTempoProcessamento());
 				linhas[i][4] = p.getPrioridade().name();
 			}
-		}
-		else {
-			linhas = new Object[4][5];
 		}
 		return linhas;
 	}
