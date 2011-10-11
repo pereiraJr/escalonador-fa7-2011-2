@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package br.com.escalonador.view;
 
@@ -14,11 +14,11 @@ import br.com.escalonador.util.MessagesResource;
 
 /**
  * Janela pricipal do programa.
- * 
+ *
  * @author nayalison
  */
 public class MainWindow extends JFrame {
-	
+
 	private static final long serialVersionUID = -1470223680745055236L;
 	private Observer observer;
 
@@ -35,19 +35,23 @@ public class MainWindow extends JFrame {
 		add(new MainPainel(), BorderLayout.CENTER);
 		setVisible(true);
 	}
-	
+
 	public void atualizarPainel(){
 		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
 		mainPainel.atualizarPainel();
 	}
-	
+
+	public void fecharJanela(){
+		System.exit(0);
+	}
+
 	public static void main(String[] args) {
 		 try {
 			 UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		MainWindow window = new MainWindow();
 	}
 

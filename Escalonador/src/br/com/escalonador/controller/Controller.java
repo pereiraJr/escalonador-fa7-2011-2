@@ -9,12 +9,12 @@ import br.com.escalonador.model.Processo;
 import br.com.escalonador.model.TipoEscalonamento;
 
 public class Controller {
-	
+
 	private static Controller controller =null;
 	private TipoEscalonamento tipoEscalonamento;
 	private List<Processo> listProcessos;
 	private int pidCounter = 0;
-	
+
 	/**
 	 * Construtor.
 	 */
@@ -22,10 +22,10 @@ public class Controller {
 		super();
 		listProcessos = new ArrayList<Processo>();
 	}
-	
+
 	/**
 	 * Esse método obtém uma instância de {@link Controller}
-	 * 
+	 *
 	 * @return uma instância de {@link Controller}
 	 */
 	public static Controller getInstance() {
@@ -34,7 +34,7 @@ public class Controller {
 		}
 		return controller;
 	}
-	
+
 	/**
 	 * @return the tipoEscalonamento
 	 */
@@ -52,22 +52,17 @@ public class Controller {
 	public void sair() {
 		System.exit(0);
 	}
-	
+
 	public void iniciarEscalonamento() {
-		
+
 	}
-	
+
 	public void pararEscalonamneto() {
-		
+
 	}
-	
+
 	public void limparValores() {
-		
-	}
-	
-	public void fecharAplicacao() {
-		
-		
+		listProcessos.clear();
 	}
 
 	public void addProcesso(Processo processo) {
@@ -75,11 +70,11 @@ public class Controller {
 			listProcessos.add(processo);
 		}
 	}
-	
+
 	public void removerProcesso(int index) {
 		listProcessos.remove(index);
 	}
-	
+
 	public Object[][] getLinhasTabela(){
 		Object[][] linhas = null;
 		if(!listProcessos.isEmpty()) {
