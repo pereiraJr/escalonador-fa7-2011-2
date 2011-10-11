@@ -25,7 +25,7 @@ import br.com.escalonador.util.MessagesResource;
 public class MainPainel extends JPanel {
 
 	private static final long serialVersionUID = 1941367165748667283L;
-	private static final int OPCAO_SIM = 0; 
+	private static final int OPCAO_SIM = 0;
 	private JTabbedPane abaPane;
 	private JButton btSuperNovo;
 	private JButton btInferNovo ;
@@ -34,7 +34,7 @@ public class MainPainel extends JPanel {
 	private JButton btSuperExcluir;
 	private JButton btInferExcluir;
 	private JPanel painelProcessos;
-	private JTable jtable; 
+	private JTable jtable;
 
 	/**
 	 * Construtor.
@@ -45,7 +45,7 @@ public class MainPainel extends JPanel {
 		add(getManiPainel(), BorderLayout.CENTER);
 		setVisible(true);
 	}
-	
+
 	public void atualizarPainel(){
 		setVisible(false);
 		this.removeAll();
@@ -60,7 +60,7 @@ public class MainPainel extends JPanel {
 		abaPane.addTab(MessagesResource.getString("janela.aba.execucao"), getPainelExecucao());
 		return abaPane;
 	}
-	
+
 	private Component getPainelProcessos() {
 	    painelProcessos = new JPanel();
 		painelProcessos.setLayout(new BorderLayout());
@@ -73,7 +73,7 @@ public class MainPainel extends JPanel {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private JPanel getPainelBotoesSuperiores() {
 		JPanel painelBotoes = new JPanel();
@@ -89,9 +89,9 @@ public class MainPainel extends JPanel {
 		painelBotoes.add(btSuperExcluir);
 		return painelBotoes;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private JPanel getPainelBotoesInferiores() {
 		JPanel painelBotoes = new JPanel();
@@ -105,7 +105,7 @@ public class MainPainel extends JPanel {
 		btInferExcluir = new JButton(MessagesResource.getString("janela.aba.processos.excliuir"));
 		btInferExcluir.addActionListener(new OuvinteBotoes());
 		painelBotoes.add(btInferExcluir);
-		
+
 		return painelBotoes;
 	}
 
@@ -137,27 +137,28 @@ public class MainPainel extends JPanel {
 	}
 
 	private Component getPainelExecucao() {
-		return null;
+		JPanel painelExecucao = new JPanel();
+		return painelExecucao;
 	}
-	
+
 	public JPanel getPanel(){
 		JPanel tmp = new JPanel();
 		tmp.setSize(2, 7);
 		return tmp;
 	}
-  
-	
+
+
 
 	/**
 	 * Listener do menu parar.
-	 * 
+	 *
 	 * @author nayalison
 	 */
 	class OuvinteBotoes implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
 		 * )
@@ -181,7 +182,7 @@ public class MainPainel extends JPanel {
 		}
 
 	}
-	
 
-	
+
+
 }
