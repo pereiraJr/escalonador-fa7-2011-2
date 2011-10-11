@@ -5,12 +5,12 @@ import br.com.escalonador.view.MainWindow;
 import br.com.escalonador.view.ProcessoWindow;
 
 public class Observer {
-	
+
 	private MainWindow mainWindow;
 	private ProcessoWindow  processoWindow;
 	private static Observer instance;
 	private Controller controller;
-	
+
 	/**
 	 * Construtor.
 	 */
@@ -18,7 +18,7 @@ public class Observer {
 		super();
 		controller = Controller.getInstance();
 	}
-	
+
 	public static Observer getInstance(){
 		if(instance == null) {
 			instance = new Observer();
@@ -53,27 +53,35 @@ public class Observer {
 	public final void setProcessoWindow(ProcessoWindow processoWindow) {
 		this.processoWindow = processoWindow;
 	}
-	
+
 	public void addProcesso(){
 		Processo processo = processoWindow.getProcesso();
 		controller.addProcesso(processo);
 		closeProcessoWindow();
 	}
-	
+
 	public void closeProcessoWindow(){
 		processoWindow.dispose();
 		processoWindow.setVisible(false);
 		mainWindow.atualizarPainel();
 		mainWindow.setVisible(true);
 	}
-	
+
 	public void bloquearMainWindow(){
 		mainWindow.dispose();
 	}
-	
+
 	public void removerProcesso(int index) {
 		controller.removerProcesso(index);
 		mainWindow.atualizarPainel();
+	}
+
+	public void atualizarTabelaProcessos(){
+		mainWindow.atualizarPainel();
+	}
+
+	public void fecharJanela(){
+		mainWindow.fecharJanela();
 	}
 
 }
