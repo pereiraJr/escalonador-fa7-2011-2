@@ -3,6 +3,7 @@
  */
 package br.com.escalonador.view;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
 
 import br.com.escalonador.controller.Controller;
 import br.com.escalonador.controller.Observer;
@@ -96,14 +98,24 @@ public class Menu extends JMenuBar {
 	 */
 	class OuvinteMenuIniciar implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
+		 * )
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			controller.iniciarEscalonamento();
+			SwingUtilities.invokeLater(new Runnable() {
+			    public void run() {
+			    	 controller.iniciarEscalonamento();
+				   }  
+			    }
+			  );
+			System.out.println("Teste");
+			 Observer.getInstance().atualizarPainelProcessos();
 		}
-
 	}
 
 	/**

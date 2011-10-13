@@ -1,5 +1,7 @@
 package br.com.escalonador.controller;
 
+import javax.swing.SwingUtilities;
+
 import br.com.escalonador.model.Processo;
 import br.com.escalonador.view.MainWindow;
 import br.com.escalonador.view.ProcessoWindow;
@@ -85,7 +87,17 @@ public class Observer {
 	}
 	
 	public void atualizarPainelProcessos(){
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	mainWindow.atualizarPainelProcessos();
+				System.out.println("Atualizando painel processos.");
+				  
+			   }  
+		    }
+		  );
 		
+//		mainWindow.atualizarPainelProcessos();
+//		System.out.println("Atualizando painel processos.");
 	}
 
 }

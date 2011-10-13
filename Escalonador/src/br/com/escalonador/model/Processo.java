@@ -6,6 +6,7 @@ package br.com.escalonador.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.escalonador.controller.Observer;
 import br.com.escalonador.model.exception.BusinessException;
 
 /**
@@ -154,6 +155,7 @@ public class Processo extends Thread{
 	@Override
 	public void run() {
 		this.estado = Estado.EXECUTANDO;
+		Observer.getInstance().atualizarPainelProcessos();
 		horaReferencia = System.currentTimeMillis();
 		tempoRestante = horaReferencia + tempoProcessamento * SimuladorConstants.QUANTUM;
 		while(tempoRestante - horaReferencia > 0) {
