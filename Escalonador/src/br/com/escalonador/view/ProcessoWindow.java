@@ -6,6 +6,7 @@ package br.com.escalonador.view;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -50,9 +51,9 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 		setTitle(MessagesResource.getString("janela.processo.titulo"));
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
-		add(new Menu(), BorderLayout.NORTH);
 		add(getMainPanel(), BorderLayout.CENTER);
 		add(getPainelBotoes(), BorderLayout.SOUTH);
+		centralizar();
 		setVisible(true);
 	}
 
@@ -88,10 +89,14 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 		return instance;
 	}
 	
+	public void centralizar(){
+		Dimension dimension = this.getToolkit().getScreenSize(); 
+		int x = (int) (dimension.getWidth() - this.getSize().getWidth() ) / 2; 
+		int y = (int) (dimension.getHeight() - this.getSize().getHeight()) / 2; 
+		this.setLocation(x,y); 
+	}
+	
 	public Processo getProcesso(){
-//		Prioridade prioridade = null;
-//		String selectedIndex = (String)cbPrioridade.getSelectedItem();
-//		prioridade = Prioridade.valueOf(selectedIndex);
 		return new Processo(controller.getPid(), Long.valueOf(qtdTempo.getText()),  Integer.valueOf(qtdMenmoria.getText()), (Prioridade)cbPrioridade.getSelectedItem());
 	}
 

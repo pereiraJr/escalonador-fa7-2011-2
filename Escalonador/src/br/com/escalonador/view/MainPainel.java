@@ -1,14 +1,17 @@
 package br.com.escalonador.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -20,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import br.com.escalonador.controller.Controller;
 import br.com.escalonador.controller.Observer;
+import br.com.escalonador.model.Processo;
 import br.com.escalonador.util.MessagesResource;
 
 public class MainPainel extends JPanel {
@@ -33,7 +37,10 @@ public class MainPainel extends JPanel {
 	private JButton btInferEditar;
 	private JButton btSuperExcluir;
 	private JButton btInferExcluir;
-	private JPanel painelProcessos;
+	private JPanel painelTabelaProcessos;
+	private JPanel painelEstatus;
+	private JPanel painelMemoria;
+	private JPanel painelInfo;
 	private JTable jtable;
 
 	/**
@@ -62,14 +69,14 @@ public class MainPainel extends JPanel {
 	}
 
 	private Component getPainelProcessos() {
-	    painelProcessos = new JPanel();
-		painelProcessos.setLayout(new BorderLayout());
-		painelProcessos.add(getPainelBotoesSuperiores(), BorderLayout.NORTH);
-		painelProcessos.add(getPainelBotoesInferiores(), BorderLayout.SOUTH);
-		painelProcessos.add(getTabelaProcessos(), BorderLayout.CENTER);
-		painelProcessos.add(getPanel(), BorderLayout.EAST);
-		painelProcessos.add(getPanel(), BorderLayout.WEST);
-		return painelProcessos;
+	    painelTabelaProcessos = new JPanel();
+		painelTabelaProcessos.setLayout(new BorderLayout());
+		painelTabelaProcessos.add(getPainelBotoesSuperiores(), BorderLayout.NORTH);
+		painelTabelaProcessos.add(getPainelBotoesInferiores(), BorderLayout.SOUTH);
+		painelTabelaProcessos.add(getTabelaProcessos(), BorderLayout.CENTER);
+		painelTabelaProcessos.add(getPanel(), BorderLayout.EAST);
+		painelTabelaProcessos.add(getPanel(), BorderLayout.WEST);
+		return painelTabelaProcessos;
 	}
 
 	/**
@@ -138,9 +145,52 @@ public class MainPainel extends JPanel {
 
 	private Component getPainelExecucao() {
 		JPanel painelExecucao = new JPanel();
+		painelExecucao.setLayout(new BorderLayout());
+		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
+		painelExecucao.add(getPainelStatus(), BorderLayout.WEST);
+		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
 		return painelExecucao;
 	}
 
+	private Component getPainelInfo() {
+		painelInfo = new JPanel();
+		painelInfo.setBackground(Color.DARK_GRAY);
+		return painelInfo;
+	}
+
+	private Component getPainelMemoria() {
+		painelMemoria = new JPanel();
+		painelMemoria.setBackground(Color.blue);
+		return painelMemoria;
+	}
+
+	private Component getPainelStatus() {
+		Controller controller = Controller.getInstance();
+		painelEstatus = new JPanel();
+		painelEstatus.setLayout(new GridLayout(controller.getQtdProcessos(), 1));
+		for(Processo p: controller.getListProcessos()) {
+			JLabel label = new JLabel(p.toString());
+			switch(p.getEstado()){
+			case BLOQUEADO:
+				label.setBackground(Color.RED);
+				break;
+			case EXECUTANDO: 
+				label.setBackground(Color.green);
+				break;
+			case PRONTO:
+				label.setBackground(Color.YELLOW);
+				break;
+			case FINALIZADO:
+				label.setBackground(Color.GRAY);
+				break;
+			}
+			painelEstatus.add(label);
+		}
+		JScrollPane jScrollPane = new JScrollPane(painelEstatus);
+		return jScrollPane;
+	}
+	
+	
 	public JPanel getPanel(){
 		JPanel tmp = new JPanel();
 		tmp.setSize(2, 7);

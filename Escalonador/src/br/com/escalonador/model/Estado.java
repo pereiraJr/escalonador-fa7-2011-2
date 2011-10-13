@@ -10,7 +10,8 @@ package br.com.escalonador.model;
 public enum Estado {
 	PRONTO(1),
 	EXECUTANDO(2),
-	BLOQUEADO(3);
+	BLOQUEADO(3),
+	FINALIZADO(4);
 	
 	private int estado;
 	

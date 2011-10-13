@@ -3,23 +3,31 @@
  */
 package br.com.escalonador.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.escalonador.model.exception.BusinessException;
+
 /**
  * 
  * @author Nayalison
  */
-public class Processo {
+public class Processo extends Thread{
 
 	private int pid;
 	private String descricao;
 	private long tempoProcessamento;
 	private int tamanhoMemoria;
-	
 	private Prioridade prioridade;
 	private Estado estado;
+	private long tempoRestante;
+	private long horaReferencia;
+	private List<Integer> listaBilhetes;
 	
 	
 	
 	/**
+	 * Construtor.
 	 * 
 	 * @param pid id do processo
 	 * @param tempoProcessamento tempo de processamento
@@ -33,11 +41,13 @@ public class Processo {
 		this.tempoProcessamento = tempoProcessamento;
 		this.tamanhoMemoria = tamanhoMemoria;
 		this.prioridade = prioridade;
+		listaBilhetes = new ArrayList<Integer>();
 	}
 	
 	
 	
 	/**
+	 * Construtor.
 	 * 
 	 * @param pid id do processo
 	 * @param descricao descrição do processo
@@ -55,6 +65,7 @@ public class Processo {
 		this.tamanhoMemoria = tamanhoMemoria;
 		this.prioridade = prioridade;
 		this.estado = estado;
+		listaBilhetes = new ArrayList<Integer>();
 	}
 
 
@@ -112,6 +123,64 @@ public class Processo {
 	 */
 	public final void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+	
+	/**
+	 * @return the listaBilhetes
+	 */
+	public final List<Integer> getListaBilhetes() {
+		return listaBilhetes;
+	}
+
+	/**
+	 * @param listaBilhetes the listaBilhetes to set
+	 */
+	public final void setListaBilhetes(List<Integer> listaBilhetes) {
+		this.listaBilhetes = listaBilhetes;
+	}
+	
+	public boolean hasBilhete(final Integer bilhete){
+		boolean retorno = false;
+		if(listaBilhetes!=null && !listaBilhetes.isEmpty()) {
+			retorno = listaBilhetes.contains(bilhete);
+		}
+		return retorno;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		this.estado = Estado.EXECUTANDO;
+		horaReferencia = System.currentTimeMillis();
+		tempoRestante = horaReferencia + tempoProcessamento * SimuladorConstants.QUANTUM;
+		while(tempoRestante - horaReferencia > 0) {
+			horaReferencia = System.currentTimeMillis();
+		}
+		this.estado = Estado.FINALIZADO;
+	}
+	
+	public void parar() throws BusinessException {
+		try {
+			this.estado = Estado.PRONTO;
+			this.wait();
+		} catch (InterruptedException e) {
+			throw new BusinessException("Não foi possivel parar o processo com o PID= " + pid, e);
+		}
+	}
+	
+	public void reiniciar(){
+		this.estado = Estado.EXECUTANDO;
+		long tempoParado = System.currentTimeMillis() - horaReferencia;
+		tempoRestante += tempoParado;
+		this.notify();
+	}
+
+	public String toString() {
+		return "PID: " + pid + " Tempo de processamento: " + tempoProcessamento
+				+ " Memória requerida: " + tamanhoMemoria + " Prioridade: "
+				+ prioridade + " Status: " + estado;
 	}
 	
 }

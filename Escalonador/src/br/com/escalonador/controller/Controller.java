@@ -94,5 +94,18 @@ public class Controller {
 	public int getPid() {
 		return pidCounter++;
 	}
+	
+	public int getQtdProcessos(){
+		return listProcessos.size();
+	}
+
+	/**
+	 * @return the listProcessos
+	 */
+	public final List<Processo> getListProcessos() {
+		return listProcessos;
+	}
+	
+	
 
 }

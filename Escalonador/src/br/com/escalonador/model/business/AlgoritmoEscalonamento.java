@@ -1,5 +1,12 @@
 package br.com.escalonador.model.business;
 
-public class AlgoritmoEscalonamento {
+import java.util.List;
+
+import br.com.escalonador.model.Processo;
+import br.com.escalonador.model.exception.BusinessException;
+
+public interface AlgoritmoEscalonamento {
+	
+	void escalonar(List<Processo> listaProcessos) throws BusinessException;
 
 }
