@@ -41,6 +41,7 @@ public class Processo extends Thread{
 		this.tempoProcessamento = tempoProcessamento;
 		this.tamanhoMemoria = tamanhoMemoria;
 		this.prioridade = prioridade;
+		this.estado = Estado.PRONTO;
 		listaBilhetes = new ArrayList<Integer>();
 	}
 	
