@@ -3,6 +3,7 @@ package br.com.escalonador.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -58,6 +59,14 @@ public class MainPainel extends JPanel {
 		this.removeAll();
 		setLayout(new BorderLayout());
 		add(getManiPainel(), BorderLayout.CENTER);
+		setVisible(true);
+	}
+	public void atualizarPainelProcessos(){
+		setVisible(false);
+		this.removeAll();
+		setLayout(new BorderLayout());
+		add(getManiPainel(), BorderLayout.CENTER);
+		abaPane.setSelectedIndex(1);
 		setVisible(true);
 	}
 
@@ -167,24 +176,27 @@ public class MainPainel extends JPanel {
 	private Component getPainelStatus() {
 		Controller controller = Controller.getInstance();
 		painelEstatus = new JPanel();
-		painelEstatus.setLayout(new GridLayout(controller.getQtdProcessos(), 1));
-		for(Processo p: controller.getListProcessos()) {
+		painelEstatus
+				.setLayout(new GridLayout(controller.getQtdProcessos(), 1));
+		for (Processo p : controller.getListProcessos()) {
+			JPanel painel = new JPanel();
 			JLabel label = new JLabel(p.toString());
-			switch(p.getEstado()){
+			switch (p.getEstado()) {
 			case BLOQUEADO:
-				label.setBackground(Color.RED);
+				painel.setBackground(Color.RED);
 				break;
-			case EXECUTANDO: 
-				label.setBackground(Color.green);
+			case EXECUTANDO:
+				painel.setBackground(Color.GREEN);
 				break;
 			case PRONTO:
-				label.setBackground(Color.YELLOW);
+				painel.setBackground(Color.YELLOW);
 				break;
 			case FINALIZADO:
-				label.setBackground(Color.GRAY);
+				painel.setBackground(Color.GRAY);
 				break;
 			}
-			painelEstatus.add(label);
+			painel.add(label);
+			painelEstatus.add(painel);
 		}
 		JScrollPane jScrollPane = new JScrollPane(painelEstatus);
 		return jScrollPane;

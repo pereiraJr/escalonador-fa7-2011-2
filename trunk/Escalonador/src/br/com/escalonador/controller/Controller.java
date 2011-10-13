@@ -3,10 +3,16 @@ package br.com.escalonador.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
 
 import br.com.escalonador.model.Processo;
 import br.com.escalonador.model.TipoEscalonamento;
+import br.com.escalonador.model.business.AlgoritmoEscalonamento;
+import br.com.escalonador.model.business.AlgoritmoFIFO;
+import br.com.escalonador.model.business.AlgoritmoLoteria;
+import br.com.escalonador.model.exception.BusinessException;
 
 public class Controller {
 
@@ -21,6 +27,7 @@ public class Controller {
 	private Controller() {
 		super();
 		listProcessos = new ArrayList<Processo>();
+		tipoEscalonamento = TipoEscalonamento.FIFO;
 	}
 
 	/**
@@ -54,7 +61,41 @@ public class Controller {
 	}
 
 	public void iniciarEscalonamento() {
-
+		AlgoritmoEscalonamento algoritmo;
+//		switch (tipoEscalonamento) {
+//		case FIFO:
+//			algoritmo = new AlgoritmoFIFO();
+//			break;
+//		case LOTERIA:
+//			algoritmo = new AlgoritmoLoteria();
+//
+//		}
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	AlgoritmoEscalonamento algoritmo = new AlgoritmoFIFO();
+		    	((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
+				((AlgoritmoFIFO)algoritmo).run();
+				  
+			   }  
+		    }
+		  );
+		
+		
+		
+		
+		
+//		try {
+//			((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
+//			((AlgoritmoFIFO)algoritmo).run();
+//		} catch (BusinessException e) {
+//			JOptionPane
+//					.showMessageDialog(
+//							null,
+//							"Não foi possivel iniciar a simulação do escalonamento devido ao seguinte error:\n"
+//									+ e.getMessage(),
+//							"Error ao iniciar o escalonamneto",
+//							JOptionPane.ERROR_MESSAGE);
+//		}
 	}
 
 	public void pararEscalonamneto() {

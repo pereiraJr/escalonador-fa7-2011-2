@@ -45,6 +45,11 @@ public class MainWindow extends JFrame {
 		int y = (int) (dimension.getHeight() - this.getSize().getHeight()) / 2; 
 		this.setLocation(x,y); 
 	}
+	
+	public void atualizarPainelProcessos(){
+		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
+		mainPainel.atualizarPainelProcessos();
+	}
 
 	public void atualizarPainel(){
 		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
