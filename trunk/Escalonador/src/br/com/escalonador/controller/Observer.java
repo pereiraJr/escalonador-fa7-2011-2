@@ -83,5 +83,9 @@ public class Observer {
 	public void fecharJanela(){
 		mainWindow.fecharJanela();
 	}
+	
+	public void atualizarPainelProcessos(){
+		
+	}
 
 }

@@ -9,7 +9,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
-class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+public class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+	
+	private static final long serialVersionUID = 6898757547149333230L;
 	private JRadioButton button;
 
 	public RadioButtonEditor(JCheckBox checkBox) {
