@@ -34,25 +34,16 @@ public class AlgoritmoFIFO implements AlgoritmoEscalonamento, Runnable {
 		for(Processo p: listaProcessos) {
 			p.start();
 			Observer.getInstance().atualizarPainelProcessos();
-			while(p.getEstado() != Estado.FINALIZADO)
-				System.out.println("AlgoritmoFIFO is runnig");
+			while(p.getEstado() != Estado.FINALIZADO){
+				System.out.println("running");
+			}
 			Observer.getInstance().atualizarPainelProcessos();
 		}
 	}
 
-	/**
-	 * @return the listaProcessos
-	 */
-	public final List<Processo> getListaProcessos() {
-		return listaProcessos;
+	private void doSathing() {
+		// TODO Auto-generated method stub
+		
 	}
-
-	/**
-	 * @param listaProcessos the listaProcessos to set
-	 */
-	public final void setListaProcessos(List<Processo> listaProcessos) {
-		this.listaProcessos = listaProcessos;
-	}
-
 
 }

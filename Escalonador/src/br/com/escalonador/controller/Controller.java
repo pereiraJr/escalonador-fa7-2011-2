@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
+import br.com.escalonador.model.Estado;
 import br.com.escalonador.model.Processo;
 import br.com.escalonador.model.TipoEscalonamento;
 import br.com.escalonador.model.business.AlgoritmoEscalonamento;
@@ -61,41 +62,39 @@ public class Controller {
 	}
 
 	public void iniciarEscalonamento() {
-		AlgoritmoEscalonamento algoritmo;
-//		switch (tipoEscalonamento) {
-//		case FIFO:
-//			algoritmo = new AlgoritmoFIFO();
-//			break;
-//		case LOTERIA:
-//			algoritmo = new AlgoritmoLoteria();
-//
-//		}
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	AlgoritmoEscalonamento algoritmo = new AlgoritmoFIFO();
-		    	((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
-				((AlgoritmoFIFO)algoritmo).run();
-				  
-			   }  
-		    }
-		  );
-		
-		
-		
-		
-		
-//		try {
-//			((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
-//			((AlgoritmoFIFO)algoritmo).run();
-//		} catch (BusinessException e) {
-//			JOptionPane
-//					.showMessageDialog(
-//							null,
-//							"Não foi possivel iniciar a simulação do escalonamento devido ao seguinte error:\n"
-//									+ e.getMessage(),
-//							"Error ao iniciar o escalonamneto",
-//							JOptionPane.ERROR_MESSAGE);
-//		}
+		// Thread d = new Thread() {
+		// public void run() {
+		// AlgoritmoEscalonamento algoritmo = new AlgoritmoFIFO();
+		// ((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
+		// ((AlgoritmoFIFO)algoritmo).run();
+		// }
+		// };
+		// d.start();
+		Thread d = new Thread() {
+			public void run() {
+				try {
+					AlgoritmoEscalonamento algoritmo = null;
+					switch (tipoEscalonamento) {
+					case FIFO:
+						algoritmo = new AlgoritmoFIFO();
+						break;
+					case LOTERIA:
+						algoritmo = new AlgoritmoLoteria();
+
+					}
+					algoritmo.escalonar(listProcessos);
+				} catch (BusinessException e) {
+					JOptionPane
+							.showMessageDialog(
+									null,
+									"Não foi possivel iniciar a simulação do escalonamento devido ao seguinte error:\n"
+											+ e.getMessage(),
+									"Error ao iniciar o escalonamneto",
+									JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		};
+		d.start();
 	}
 
 	public void pararEscalonamneto() {
@@ -147,6 +146,16 @@ public class Controller {
 		return listProcessos;
 	}
 	
+	public boolean isRunning(){
+		boolean retorno = true;
+		for(Processo p: listProcessos) {
+			if(p.getEstado() == Estado.FINALIZADO) {
+				retorno =false;
+				break;
+			}
+		}
+		return retorno;
+	}
 	
 
 }

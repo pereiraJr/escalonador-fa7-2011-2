@@ -165,19 +165,15 @@ public class Processo extends Thread{
 	}
 	
 	public void parar() throws BusinessException {
-		try {
-			this.estado = Estado.PRONTO;
-			this.wait();
-		} catch (InterruptedException e) {
-			throw new BusinessException("Não foi possivel parar o processo com o PID= " + pid, e);
-		}
+		this.estado = Estado.PRONTO;
+		this.interrupt();
 	}
 	
 	public void reiniciar(){
 		this.estado = Estado.EXECUTANDO;
 		long tempoParado = System.currentTimeMillis() - horaReferencia;
 		tempoRestante += tempoParado;
-		this.notify();
+//		this.start();
 	}
 
 	public String toString() {
