@@ -12,15 +12,23 @@ import java.util.Random;
 import br.com.escalonador.model.exception.BusinessException;
 
 /**
+ * Classe reponsável por gerar, sortear e gerencias
+ * bilhetes.
+ * 
  * @author nayalison
- *
  */
 public class GeradorBilhete {
 	
 	private List<Integer> listaBilhetes;
 	private List<Integer> listaBilhetesDisponiveis;
 	Random rand = new SecureRandom(); 
-	
+
+	/**
+	 * Esse método obtém um bilhete da lista de bilhetes dispobíveis.
+	 * 
+	 * @return um bilhete
+	 * @throws BusinessException caso não haja bilhetes disoníveis
+	 */
 	public int obterBilhete() throws BusinessException{
 		if(hasBilhete()) {
 			Integer bilhete = listaBilhetesDisponiveis.get(0);

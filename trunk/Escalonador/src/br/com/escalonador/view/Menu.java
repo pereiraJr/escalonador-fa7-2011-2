@@ -17,6 +17,8 @@ import javax.swing.SwingUtilities;
 import br.com.escalonador.controller.Controller;
 import br.com.escalonador.controller.Observer;
 import br.com.escalonador.model.TipoEscalonamento;
+import br.com.escalonador.model.business.AlgoritmoEscalonamento;
+import br.com.escalonador.model.business.AlgoritmoFIFO;
 import br.com.escalonador.util.MessagesResource;
 
 /**
@@ -107,14 +109,7 @@ public class Menu extends JMenuBar {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SwingUtilities.invokeLater(new Runnable() {
-			    public void run() {
-			    	 controller.iniciarEscalonamento();
-				   }  
-			    }
-			  );
-			System.out.println("Teste");
-			 Observer.getInstance().atualizarPainelProcessos();
+			controller.iniciarEscalonamento();
 		}
 	}
 
