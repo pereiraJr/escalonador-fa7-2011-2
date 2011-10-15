@@ -3,12 +3,17 @@ package br.com.escalonador.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -157,18 +162,39 @@ public class MainPainel extends JPanel {
 		painelExecucao.setLayout(new BorderLayout());
 		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
 		painelExecucao.add(getPainelStatus(), BorderLayout.WEST);
-		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
+		painelExecucao.add(getPainelInfo(), BorderLayout.CENTER);
 		return painelExecucao;
 	}
 
 	private Component getPainelInfo() {
 		painelInfo = new JPanel();
-		painelInfo.setBackground(Color.DARK_GRAY);
+		painelInfo.setMinimumSize(new Dimension(200, 200));
+		painelInfo.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		painelInfo.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.informacao")));
+		JLabel labelTipoAlgoritmo = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.algoritmo"));
+		JLabel vLabelTipoAlgoritmo = new JLabel(Controller.getInstance().getTipoEscalonamento().toString());
+		JLabel labelMemoria = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria"));
+		JLabel vLabelMemoria = new JLabel(String.valueOf(Controller.getInstance().getQtdMemoria()));
+		JLabel labelProcesso = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.qtd.processo"));
+		JLabel vLabelProcesso = new JLabel(String.valueOf(Controller.getInstance().getQtdProcessos()));
+		JLabel labelTempo = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.tempo.total"));
+		JLabel vLabelTempo = new JLabel(String.valueOf(Controller.getInstance().getTempoTotal()));
+		painelInfo.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		painelInfo.add(labelTipoAlgoritmo);
+		painelInfo.add(vLabelTipoAlgoritmo);
+		painelInfo.add(labelMemoria);
+		painelInfo.add(vLabelMemoria);
+		painelInfo.add(labelProcesso);
+		painelInfo.add(vLabelProcesso);
+		painelInfo.add(labelTempo);
+		painelInfo.add(vLabelTempo);
+		
 		return painelInfo;
 	}
 
 	private Component getPainelMemoria() {
 		painelMemoria = new JPanel();
+		painelMemoria.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria")));
 		painelMemoria.setBackground(Color.blue);
 		return painelMemoria;
 	}
@@ -176,11 +202,21 @@ public class MainPainel extends JPanel {
 	private Component getPainelStatus() {
 		Controller controller = Controller.getInstance();
 		painelEstatus = new JPanel();
-		painelEstatus
-				.setLayout(new GridLayout(controller.getQtdProcessos(), 1));
+		painelEstatus.setAutoscrolls(false);
+		painelEstatus.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.monitor")));
+//		painelEstatus.setLayout(new GridLayout(controller.getQtdProcessos(),1 , 0, 0));
+		GridBagLayout gbl =new GridBagLayout();
+		
+		GridBagConstraints c = gbl.getConstraints(painelEstatus);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		painelEstatus.setLayout(gbl);
+		painelEstatus.setMaximumSize(new Dimension(200, 400));
+		int row = 0;
 		for (Processo p : controller.getListProcessos()) {
 			JPanel painel = new JPanel();
+			painel.setBorder(BorderFactory.createEmptyBorder());
 			JLabel label = new JLabel(p.toString());
+			painel.add(label);
 			switch (p.getEstado()) {
 			case BLOQUEADO:
 				painel.setBackground(Color.RED);
@@ -195,8 +231,9 @@ public class MainPainel extends JPanel {
 				painel.setBackground(Color.GRAY);
 				break;
 			}
-			painel.add(label);
-			painelEstatus.add(painel);
+			c.gridy = row;
+			painelEstatus.add(painel, c);
+			row++;
 		}
 		JScrollPane jScrollPane = new JScrollPane(painelEstatus);
 		return jScrollPane;

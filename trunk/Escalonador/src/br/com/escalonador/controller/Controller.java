@@ -156,6 +156,26 @@ public class Controller {
 		}
 		return retorno;
 	}
+
+	public int getQtdMemoria() {
+		int qtdMemoria = 0;
+		if(!listProcessos.isEmpty()) {
+			for(Processo p: listProcessos) {
+				qtdMemoria += p.getTamanhoMemoria();
+			}
+		}
+		return qtdMemoria;
+	}
+	
+	public long getTempoTotal(){
+		long tempoTotal = 0;
+		if(!listProcessos.isEmpty()) {
+			for(Processo p: listProcessos) {
+				tempoTotal += p.getTempoProcessamento();
+			}
+		}
+		return tempoTotal;
+	}
 	
 
 }
