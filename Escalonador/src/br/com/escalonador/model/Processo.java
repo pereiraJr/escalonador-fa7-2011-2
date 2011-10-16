@@ -45,7 +45,7 @@ public class Processo extends Thread{
 		this.tempoProcessamento = tempoProcessamento;
 		this.tamanhoMemoria = tamanhoMemoria;
 		this.prioridade = prioridade;
-		this.estado = Estado.PRONTO;
+		setEstado(Estado.PRONTO);
 		listaBilhetes = new ArrayList<Integer>();
 		pausado = false;
 	}
@@ -70,7 +70,7 @@ public class Processo extends Thread{
 		this.tempoProcessamento = tempoProcessamento;
 		this.tamanhoMemoria = tamanhoMemoria;
 		this.prioridade = prioridade;
-		this.estado = estado;
+		setEstado(estado);
 		listaBilhetes = new ArrayList<Integer>();
 		pausado = false;
 	}
@@ -122,13 +122,13 @@ public class Processo extends Thread{
 	/**
 	 * @return the estado
 	 */
-	public final Estado getEstado() {
+	public synchronized final Estado getEstado() {
 		return estado;
 	}
 	/**
 	 * @param estado the estado to set
 	 */
-	public final void setEstado(Estado estado) {
+	public synchronized final void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 	
@@ -146,7 +146,9 @@ public class Processo extends Thread{
 		this.listaBilhetes = listaBilhetes;
 	}
 
-
+	public long getTempoRestante() {
+		return tempoRestante - horaReferencia;
+	}
 
 	public boolean hasBilhete(final Integer bilhete){
 		boolean retorno = false;
@@ -161,7 +163,7 @@ public class Processo extends Thread{
 	 */
 	@Override
 	public void run() {
-		this.estado = Estado.EXECUTANDO;
+		setEstado(Estado.EXECUTANDO);
 		Observer.getInstance().atualizarPainelProcessos();
 		horaReferencia = System.currentTimeMillis();
 		tempoRestante = horaReferencia + (tempoProcessamento * SimuladorConstants.QUANTUM);
@@ -169,21 +171,29 @@ public class Processo extends Thread{
 			horaReferencia = System.currentTimeMillis();
 			verificaPausa();
 		}
-		this.estado = Estado.FINALIZADO;
+		//==============================================
+		//Região cítica
+		//==============================================
+		setEstado(Estado.FINALIZADO);
+		System.out.println("Finalizando processo: "+pid);
 		pausado = false;
 	}
 	
 	public void parar()
 			throws BusinessException {
-		this.estado = Estado.PRONTO;
+		if(getEstado() != Estado.FINALIZADO) {
+			setEstado(Estado.PRONTO);
+		}
 		pausado = true;
 	}
 	
 	public synchronized void  reiniciar(){
-		this.estado = Estado.EXECUTANDO;
+		setEstado(Estado.EXECUTANDO);
+		System.out.println("\n---------------------------------------------\nTempo restante: "+(tempoRestante - horaReferencia)+"\n");
 		long tempoParado = System.currentTimeMillis() - horaReferencia;
 		tempoRestante += tempoParado;
 				System.out.println("Reiniciando processo: "+ pid);
+				System.out.println("Tempo restante: "+(tempoRestante - horaReferencia)+"\n--------------------------------------------\n");
 				pausado = false;
 				notifyAll();
 				
@@ -205,7 +215,7 @@ public class Processo extends Thread{
 	public String toString() {
 		return "PID: " + pid + " Tempo de processamento: " + tempoProcessamento
 				+ " Memória requerida: " + tamanhoMemoria + " Prioridade: "
-				+ prioridade + " Status: " + estado;
+				+ prioridade + " Status: " + getEstado();
 	}
 	
 }

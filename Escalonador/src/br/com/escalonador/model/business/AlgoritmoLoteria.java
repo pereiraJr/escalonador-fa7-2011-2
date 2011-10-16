@@ -47,12 +47,12 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 			int qtdBilhetes = 0;
 			processos = new ArrayList<Processo>();
 			processos.addAll(listaProcessos);
-			for (Processo p : listaProcessos) {
+			for (Processo p : processos) {
 				qtdBilhetes += p.getPrioridade().getPrioridade();
 			}
 			GeradorBilhete geradorBilhete = new GeradorBilhete();
 			geradorBilhete.gerarBilhetes(qtdBilhetes);
-			for (Processo p : listaProcessos) {
+			for (Processo p : processos) {
 				p.setListaBilhetes(geradorBilhete.obterBilhete(p
 						.getPrioridade().getPrioridade()));
 			}
@@ -61,19 +61,23 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 				System.out.println("Quantidade de processos: " + processos.size());
 				Integer bilhete = geradorBilhete.sortearBilhete();
 				Processo processo = obterProcessoSorteado(bilhete);
-				if (!processo.isAlive()) {
-					System.out.println("Iniciando processo: " + processo.getPid());
-					System.out.println("Esta interopida: " +processo.isInterrupted());
-					System.out.println("Esta viva: " + processo.isAlive());
-					processo.start();
-				} else {
-					processo.reiniciar();
+				if(processo.getEstado() != Estado.FINALIZADO) {
+					if (!processo.isAlive()) {
+						System.out.println("Estado do processo " + processo.getPid()+" "+processo.getEstado());
+						System.out.println("Esta interopida: " +processo.isInterrupted());
+						System.out.println("Esta viva: " + processo.isAlive());
+						System.out.println("Tempo restante: "+processo.getTempoRestante());
+						processo.start();
+					} else {
+						processo.reiniciar();
+					}
 				}
 				long tempoRestante = System.currentTimeMillis() + SimuladorConstants.QUANTUM_PREMIO;
 				while (tempoRestante - System.currentTimeMillis() > 0 && processo.getEstado() != Estado.FINALIZADO);
 				if (processo.getEstado() == Estado.FINALIZADO) {
 					processos.remove(processo);
 					geradorBilhete.devolverBilhetes(processo.getListaBilhetes());
+					System.out.println("Removendo processo: "+processo.getPid());
 				} else {
 					processo.parar();
 				}

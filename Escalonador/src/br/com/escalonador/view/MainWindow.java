@@ -28,7 +28,7 @@ public class MainWindow extends JFrame {
 		observer = Observer.getInstance();
 		observer.setMainWindow(this);
 		setLocationRelativeTo( null );
-		setResizable(false);
+//		setResizable(false);
 		setSize(990, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle(MessagesResource.getString("janela.titulo"));
