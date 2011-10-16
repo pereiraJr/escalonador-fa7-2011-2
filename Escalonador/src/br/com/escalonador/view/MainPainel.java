@@ -4,12 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 import br.com.escalonador.controller.Controller;
 import br.com.escalonador.controller.Observer;
 import br.com.escalonador.model.Processo;
+import br.com.escalonador.model.TipoEscalonamento;
 import br.com.escalonador.util.MessagesResource;
 
 public class MainPainel extends JPanel {
@@ -43,17 +41,22 @@ public class MainPainel extends JPanel {
 	private JButton btInferEditar;
 	private JButton btSuperExcluir;
 	private JButton btInferExcluir;
+	private JButton btIniciar;
+	private JRadioButton jrbFIFO;
+	private JRadioButton jrbLoteria;
 	private JPanel painelTabelaProcessos;
 	private JPanel painelEstatus;
 	private JPanel painelMemoria;
 	private JPanel painelInfo;
 	private JTable jtable;
+	private Controller controller;
 
 	/**
 	 * Construtor.
 	 */
 	public MainPainel() {
 		super();
+		controller = Controller.getInstance();
 		setLayout(new BorderLayout());
 		add(getManiPainel(), BorderLayout.CENTER);
 		setVisible(true);
@@ -159,11 +162,60 @@ public class MainPainel extends JPanel {
 
 	private Component getPainelExecucao() {
 		JPanel painelExecucao = new JPanel();
-		painelExecucao.setLayout(new BorderLayout());
-		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
-		painelExecucao.add(getPainelStatus(), BorderLayout.CENTER);
-		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
+//		painelExecucao.setLayout(new BorderLayout());
+//		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
+//		painelExecucao.add(getPainelStatus(), BorderLayout.CENTER);
+//		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
+		painelExecucao.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.0;
+		c.weighty = 0.1;
+		c.gridwidth = 3;
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		painelExecucao.add(getPainelBotoesExecucao(), c);
+		c.gridwidth = 3;
+		c.ipady = 30;
+		c.gridx = 0;
+		c.gridy = 1;
+		painelExecucao.add(getPainelMemoria(), c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.ipady = 350;
+		c.ipadx = 650;
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = 2;
+		painelExecucao.add(getPainelStatus(), c);
+		c.gridwidth = 1;
+		c.ipady = 50;
+		c.ipadx = 40;
+		c.gridx = 2;
+		c.gridy = 2;
+		painelExecucao.add(getPainelInfo(), c);
 		return painelExecucao;
+	}
+
+	private Component getPainelBotoesExecucao() {
+		JPanel painel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		btIniciar = new JButton(MessagesResource.getString("janela.aba.execucao.botoes.start"));
+//		btIniciar.seti
+		btIniciar.addActionListener(new OuvinteBotoes());
+		painel.add(btIniciar);
+		painel.add(new JLabel(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo")));
+		ButtonGroup buttonGroup = new ButtonGroup();
+		jrbFIFO = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.fifo"), true);
+		jrbFIFO.addActionListener(new OuvinteTipoAlgoritmo());
+		buttonGroup.add(jrbFIFO);
+		jrbLoteria = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.loteria"));
+		jrbLoteria.addActionListener(new OuvinteTipoAlgoritmo());
+		buttonGroup.add(jrbLoteria);
+		painel.add(jrbFIFO);
+		painel.add(jrbLoteria);
+		
+		return painel;
 	}
 
 	private Component getPainelInfo() {
@@ -193,6 +245,7 @@ public class MainPainel extends JPanel {
 		
 		return painelInfo;
 	}
+	
 
 	private Component getPainelMemoria() {
 		painelMemoria = new JPanel();
@@ -274,6 +327,31 @@ public class MainPainel extends JPanel {
 				if(confirmacao == OPCAO_SIM) {
 					Observer.getInstance().removerProcesso(index);
 				}
+			}
+			if(e.getSource() == btIniciar) {
+				controller.iniciarEscalonamento();
+			}
+		}
+
+	}
+	
+	/**
+	 * Listener do tipo de  algoritmo.
+	 *
+	 * @author nayalison
+	 */
+	class OuvinteTipoAlgoritmo implements ActionListener {
+
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == jrbFIFO) {
+				controller.setTipoEscalonamento(TipoEscalonamento.FIFO);
+			}
+			if(e.getSource() == jrbLoteria) {
+				controller.setTipoEscalonamento(TipoEscalonamento.LOTERIA);
 			}
 		}
 
