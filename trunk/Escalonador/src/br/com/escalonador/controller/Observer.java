@@ -96,8 +96,6 @@ public class Observer {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 		    	mainWindow.atualizarPainelProcessos();
-				System.out.println("Atualizando painel processos.");
-				  
 			   }  
 		    }
 		  );
