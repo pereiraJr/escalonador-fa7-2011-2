@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
-import javax.swing.SwingUtilities;
 
 import br.com.escalonador.model.Estado;
 import br.com.escalonador.model.Processo;
