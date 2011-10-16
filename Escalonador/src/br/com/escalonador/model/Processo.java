@@ -6,6 +6,8 @@ package br.com.escalonador.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import br.com.escalonador.controller.Observer;
 import br.com.escalonador.model.exception.BusinessException;
 
@@ -24,6 +26,7 @@ public class Processo extends Thread{
 	private long tempoRestante;
 	private long horaReferencia;
 	private List<Integer> listaBilhetes;
+	private boolean pausado;
 	
 	
 	
@@ -44,6 +47,7 @@ public class Processo extends Thread{
 		this.prioridade = prioridade;
 		this.estado = Estado.PRONTO;
 		listaBilhetes = new ArrayList<Integer>();
+		pausado = false;
 	}
 	
 	
@@ -68,6 +72,7 @@ public class Processo extends Thread{
 		this.prioridade = prioridade;
 		this.estado = estado;
 		listaBilhetes = new ArrayList<Integer>();
+		pausado = false;
 	}
 
 
@@ -140,7 +145,9 @@ public class Processo extends Thread{
 	public final void setListaBilhetes(List<Integer> listaBilhetes) {
 		this.listaBilhetes = listaBilhetes;
 	}
-	
+
+
+
 	public boolean hasBilhete(final Integer bilhete){
 		boolean retorno = false;
 		if(listaBilhetes!=null && !listaBilhetes.isEmpty()) {
@@ -157,24 +164,43 @@ public class Processo extends Thread{
 		this.estado = Estado.EXECUTANDO;
 		Observer.getInstance().atualizarPainelProcessos();
 		horaReferencia = System.currentTimeMillis();
-		tempoRestante = horaReferencia + tempoProcessamento * SimuladorConstants.QUANTUM;
+		tempoRestante = horaReferencia + (tempoProcessamento * SimuladorConstants.QUANTUM);
 		while(tempoRestante - horaReferencia > 0) {
 			horaReferencia = System.currentTimeMillis();
+			verificaPausa();
 		}
 		this.estado = Estado.FINALIZADO;
+		pausado = false;
 	}
 	
-	public void parar() throws BusinessException {
+	public void parar()
+			throws BusinessException {
 		this.estado = Estado.PRONTO;
-		this.interrupt();
+		pausado = true;
 	}
 	
-	public void reiniciar(){
+	public synchronized void  reiniciar(){
 		this.estado = Estado.EXECUTANDO;
 		long tempoParado = System.currentTimeMillis() - horaReferencia;
 		tempoRestante += tempoParado;
-//		this.start();
+				System.out.println("Reiniciando processo: "+ pid);
+				pausado = false;
+				notifyAll();
+				
 	}
+	
+	private synchronized void verificaPausa(){
+		try {
+			while (pausado) {
+				wait();
+			}
+
+		} catch (InterruptedException e) {
+			JOptionPane.showMessageDialog(null, "No foi possível para o processo pid: "
+					+ pid, "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 
 	public String toString() {
 		return "PID: " + pid + " Tempo de processamento: " + tempoProcessamento

@@ -161,33 +161,35 @@ public class MainPainel extends JPanel {
 		JPanel painelExecucao = new JPanel();
 		painelExecucao.setLayout(new BorderLayout());
 		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
-		painelExecucao.add(getPainelStatus(), BorderLayout.WEST);
-		painelExecucao.add(getPainelInfo(), BorderLayout.CENTER);
+		painelExecucao.add(getPainelStatus(), BorderLayout.CENTER);
+		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
 		return painelExecucao;
 	}
 
 	private Component getPainelInfo() {
+		Controller controller = Controller.getInstance();
 		painelInfo = new JPanel();
-		painelInfo.setMinimumSize(new Dimension(200, 200));
-		painelInfo.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		painelInfo.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.PAGE_START;
 		painelInfo.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.informacao")));
-		JLabel labelTipoAlgoritmo = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.algoritmo"));
-		JLabel vLabelTipoAlgoritmo = new JLabel(Controller.getInstance().getTipoEscalonamento().toString());
-		JLabel labelMemoria = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria"));
-		JLabel vLabelMemoria = new JLabel(String.valueOf(Controller.getInstance().getQtdMemoria()));
-		JLabel labelProcesso = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.qtd.processo"));
-		JLabel vLabelProcesso = new JLabel(String.valueOf(Controller.getInstance().getQtdProcessos()));
-		JLabel labelTempo = new JLabel(MessagesResource.getString("janela.aba.execucao.titulo.painel.tempo.total"));
-		JLabel vLabelTempo = new JLabel(String.valueOf(Controller.getInstance().getTempoTotal()));
-		painelInfo.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		painelInfo.add(labelTipoAlgoritmo);
-		painelInfo.add(vLabelTipoAlgoritmo);
-		painelInfo.add(labelMemoria);
-		painelInfo.add(vLabelMemoria);
-		painelInfo.add(labelProcesso);
-		painelInfo.add(vLabelProcesso);
-		painelInfo.add(labelTempo);
-		painelInfo.add(vLabelTempo);
+		JLabel labelTipoAlgoritmo = new JLabel(controller.getLabelAlgoritmo());
+		JLabel labelMemoria = new JLabel(controller.getLabelMemoria());
+		JLabel labelProcesso = new JLabel(controller.getLabelQtdProcesso());
+		JLabel labelTempo = new JLabel(controller.getLabelTempoTotal());
+		c.gridx = 0;
+		c.gridy = 0;
+		painelInfo.add(labelTipoAlgoritmo,c);
+		c.gridx = 0;
+		c.gridy = 1;
+		painelInfo.add(labelMemoria, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		painelInfo.add(labelProcesso, c);
+		c.gridx = 0;
+		c.gridy = 3;
+		painelInfo.add(labelTempo, c);
 		
 		return painelInfo;
 	}
@@ -195,26 +197,20 @@ public class MainPainel extends JPanel {
 	private Component getPainelMemoria() {
 		painelMemoria = new JPanel();
 		painelMemoria.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria")));
-		painelMemoria.setBackground(Color.blue);
 		return painelMemoria;
 	}
 
 	private Component getPainelStatus() {
 		Controller controller = Controller.getInstance();
 		painelEstatus = new JPanel();
-		painelEstatus.setAutoscrolls(false);
-		painelEstatus.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.monitor")));
-//		painelEstatus.setLayout(new GridLayout(controller.getQtdProcessos(),1 , 0, 0));
-		GridBagLayout gbl =new GridBagLayout();
-		
-		GridBagConstraints c = gbl.getConstraints(painelEstatus);
+		painelEstatus.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		painelEstatus.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		painelEstatus.setLayout(gbl);
-		painelEstatus.setMaximumSize(new Dimension(200, 400));
+		c.gridwidth = 1;
 		int row = 0;
 		for (Processo p : controller.getListProcessos()) {
 			JPanel painel = new JPanel();
-			painel.setBorder(BorderFactory.createEmptyBorder());
 			JLabel label = new JLabel(p.toString());
 			painel.add(label);
 			switch (p.getEstado()) {
@@ -231,11 +227,13 @@ public class MainPainel extends JPanel {
 				painel.setBackground(Color.GRAY);
 				break;
 			}
+			c.gridx = 0;
 			c.gridy = row;
 			painelEstatus.add(painel, c);
 			row++;
 		}
 		JScrollPane jScrollPane = new JScrollPane(painelEstatus);
+		jScrollPane.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.monitor")));
 		return jScrollPane;
 	}
 	
@@ -265,7 +263,6 @@ public class MainPainel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btSuperNovo || e.getSource() == btInferNovo) {
-				Observer.getInstance().bloquearMainWindow();
 				ProcessoWindow.getInstance();
 			}
 			if (e.getSource() == btSuperEditar || e.getSource() == btInferEditar) {

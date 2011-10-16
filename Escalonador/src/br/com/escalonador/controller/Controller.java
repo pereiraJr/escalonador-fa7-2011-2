@@ -14,6 +14,7 @@ import br.com.escalonador.model.business.AlgoritmoEscalonamento;
 import br.com.escalonador.model.business.AlgoritmoFIFO;
 import br.com.escalonador.model.business.AlgoritmoLoteria;
 import br.com.escalonador.model.exception.BusinessException;
+import br.com.escalonador.util.MessagesResource;
 
 public class Controller {
 
@@ -62,14 +63,6 @@ public class Controller {
 	}
 
 	public void iniciarEscalonamento() {
-		// Thread d = new Thread() {
-		// public void run() {
-		// AlgoritmoEscalonamento algoritmo = new AlgoritmoFIFO();
-		// ((AlgoritmoFIFO)algoritmo).setListaProcessos(listProcessos);
-		// ((AlgoritmoFIFO)algoritmo).run();
-		// }
-		// };
-		// d.start();
 		Thread d = new Thread() {
 			public void run() {
 				try {
@@ -175,6 +168,22 @@ public class Controller {
 			}
 		}
 		return tempoTotal;
+	}
+	
+	public String getLabelAlgoritmo(){
+		return MessagesResource.getString("janela.aba.execucao.titulo.painel.algoritmo") + tipoEscalonamento;
+	}
+	
+	public String getLabelMemoria(){
+		return MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria") + getQtdMemoria();
+	}
+	
+	public String getLabelQtdProcesso(){
+		return MessagesResource.getString("janela.aba.execucao.titulo.painel.qtd.processo") + getQtdProcessos();
+	}
+	
+	public String getLabelTempoTotal(){
+		return MessagesResource.getString("janela.aba.execucao.titulo.painel.tempo.total") + getTempoTotal();
 	}
 	
 
