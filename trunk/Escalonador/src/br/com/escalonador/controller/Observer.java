@@ -61,6 +61,12 @@ public class Observer {
 		controller.addProcesso(processo);
 		closeProcessoWindow();
 	}
+	
+	public void addMaisUmProcesso(){
+		Processo processo = processoWindow.getProcesso();
+		controller.addProcesso(processo);
+		mainWindow.atualizarPainel();
+	}
 
 	public void closeProcessoWindow(){
 		processoWindow.dispose();
@@ -95,9 +101,6 @@ public class Observer {
 			   }  
 		    }
 		  );
-		
-//		mainWindow.atualizarPainelProcessos();
-//		System.out.println("Atualizando painel processos.");
 	}
 
 }

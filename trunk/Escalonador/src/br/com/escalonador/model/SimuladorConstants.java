@@ -11,6 +11,6 @@ public class SimuladorConstants {
 	 * Tempo de execução concedido a cada processo pelo algoritmo
 	 * de escalonamneto loteria.
 	 */
-	public static final long QUANTUM_PREMIO = 1000;
+	public static final long QUANTUM_PREMIO = 3000;
 
 }

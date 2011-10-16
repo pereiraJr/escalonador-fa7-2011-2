@@ -8,6 +8,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import br.com.escalonador.controller.Observer;
@@ -28,7 +29,7 @@ public class MainWindow extends JFrame {
 		observer.setMainWindow(this);
 		setLocationRelativeTo( null );
 		setResizable(false);
-		setSize(900, 600);
+		setSize(990, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle(MessagesResource.getString("janela.titulo"));
 		Container c = getContentPane();
@@ -63,11 +64,10 @@ public class MainWindow extends JFrame {
 	public static void main(String[] args) {
 		 try {
 			 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			 new MainWindow();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Erro ao iniciar o aplicativo.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		MainWindow window = new MainWindow();
 	}
 
 }
