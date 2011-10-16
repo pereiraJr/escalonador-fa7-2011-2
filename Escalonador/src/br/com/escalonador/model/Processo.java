@@ -5,6 +5,8 @@ package br.com.escalonador.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JOptionPane;
 
@@ -27,6 +29,7 @@ public class Processo extends Thread{
 	private long horaReferencia;
 	private List<Integer> listaBilhetes;
 	private boolean pausado;
+	private Lock lockObject;
 	
 	
 	
@@ -48,6 +51,7 @@ public class Processo extends Thread{
 		setEstado(Estado.PRONTO);
 		listaBilhetes = new ArrayList<Integer>();
 		pausado = false;
+		lockObject =  new ReentrantLock(true);
 	}
 	
 	
@@ -157,6 +161,15 @@ public class Processo extends Thread{
 		}
 		return retorno;
 	}
+	
+
+	/**
+	 * @return the lockObject
+	 */
+	public final Lock getLockObject() {
+		return lockObject;
+	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
@@ -171,12 +184,14 @@ public class Processo extends Thread{
 			horaReferencia = System.currentTimeMillis();
 			verificaPausa();
 		}
+		
 		//==============================================
 		//Região cítica
 		//==============================================
+		lockObject.lock();
 		setEstado(Estado.FINALIZADO);
-		System.out.println("Finalizando processo: "+pid);
 		pausado = false;
+		lockObject.unlock();
 	}
 	
 	public void parar()
@@ -187,16 +202,13 @@ public class Processo extends Thread{
 		pausado = true;
 	}
 	
-	public synchronized void  reiniciar(){
+	public synchronized void reiniciar() {
 		setEstado(Estado.EXECUTANDO);
-		System.out.println("\n---------------------------------------------\nTempo restante: "+(tempoRestante - horaReferencia)+"\n");
 		long tempoParado = System.currentTimeMillis() - horaReferencia;
 		tempoRestante += tempoParado;
-				System.out.println("Reiniciando processo: "+ pid);
-				System.out.println("Tempo restante: "+(tempoRestante - horaReferencia)+"\n--------------------------------------------\n");
-				pausado = false;
-				notifyAll();
-				
+		pausado = false;
+		notifyAll();
+
 	}
 	
 	private synchronized void verificaPausa(){

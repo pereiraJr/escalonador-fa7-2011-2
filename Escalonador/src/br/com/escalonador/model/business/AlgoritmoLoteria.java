@@ -58,15 +58,10 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 			}
 
 			while (!processos.isEmpty()) {
-				System.out.println("Quantidade de processos: " + processos.size());
 				Integer bilhete = geradorBilhete.sortearBilhete();
 				Processo processo = obterProcessoSorteado(bilhete);
 				if(processo.getEstado() != Estado.FINALIZADO) {
 					if (!processo.isAlive()) {
-						System.out.println("Estado do processo " + processo.getPid()+" "+processo.getEstado());
-						System.out.println("Esta interopida: " +processo.isInterrupted());
-						System.out.println("Esta viva: " + processo.isAlive());
-						System.out.println("Tempo restante: "+processo.getTempoRestante());
 						processo.start();
 					} else {
 						processo.reiniciar();
@@ -74,13 +69,14 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 				}
 				long tempoRestante = System.currentTimeMillis() + SimuladorConstants.QUANTUM_PREMIO;
 				while (tempoRestante - System.currentTimeMillis() > 0 && processo.getEstado() != Estado.FINALIZADO);
+				processo.getLockObject().lock();
 				if (processo.getEstado() == Estado.FINALIZADO) {
 					processos.remove(processo);
 					geradorBilhete.devolverBilhetes(processo.getListaBilhetes());
-					System.out.println("Removendo processo: "+processo.getPid());
 				} else {
 					processo.parar();
 				}
+				processo.getLockObject().unlock();
 				Observer.getInstance().atualizarPainelProcessos();
 			}
 		} catch (BusinessException e) {
