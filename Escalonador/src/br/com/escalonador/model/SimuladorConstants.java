@@ -12,5 +12,7 @@ public class SimuladorConstants {
 	 * de escalonamneto loteria.
 	 */
 	public static final long QUANTUM_PREMIO = 3000;
+	
+	public static final int TAMANHO_MEMORIA = 1024;
 
 }

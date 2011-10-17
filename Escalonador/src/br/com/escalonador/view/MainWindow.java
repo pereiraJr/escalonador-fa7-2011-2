@@ -28,8 +28,8 @@ public class MainWindow extends JFrame {
 		observer = Observer.getInstance();
 		observer.setMainWindow(this);
 		setLocationRelativeTo( null );
-//		setResizable(false);
-		setSize(990, 600);
+		setResizable(false);
+		setSize(990, 700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle(MessagesResource.getString("janela.titulo"));
 		Container c = getContentPane();
@@ -48,6 +48,7 @@ public class MainWindow extends JFrame {
 	}
 	
 	public void atualizarPainelProcessos(){
+		add(new Menu(), BorderLayout.NORTH);
 		MainPainel mainPainel = (MainPainel)this.getContentPane().getComponent(1);
 		mainPainel.atualizarPainelProcessos();
 	}

@@ -78,10 +78,10 @@ public class Menu extends JMenuBar {
 		subMenuAlgoritmo = new JMenu(MessagesResource.getString("janela.menu.configuracoes.algoritmo"));
 		configuracoes.add(subMenuAlgoritmo);
 		ButtonGroup buttonGroup = new ButtonGroup();
-		subMenuFifo = new JRadioButtonMenuItem(MessagesResource.getString("janela.menu.configuracoes.algoritmo.fifo"), true);
+		subMenuFifo = new JRadioButtonMenuItem(MessagesResource.getString("janela.menu.configuracoes.algoritmo.fifo"), controller.isAlgoritmoFifo());
 		subMenuFifo.addActionListener(new OuvinteSubMenuAlgoritmo());
 		buttonGroup.add(subMenuFifo);
-		subMenuLoteria = new JRadioButtonMenuItem(MessagesResource.getString("janela.menu.configuracoes.algoritmo.loteria"));
+		subMenuLoteria = new JRadioButtonMenuItem(MessagesResource.getString("janela.menu.configuracoes.algoritmo.loteria"), controller.isAlgoritmoLoteria());
 		subMenuLoteria.addActionListener(new OuvinteSubMenuAlgoritmo());
 		buttonGroup.add(subMenuLoteria);
 		subMenuAlgoritmo.add(subMenuFifo);
@@ -175,9 +175,11 @@ public class Menu extends JMenuBar {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == subMenuFifo) {
 				controller.setTipoEscalonamento(TipoEscalonamento.FIFO);
+				Observer.getInstance().atualizarPainelProcessos();
 			}
 			if(e.getSource() == subMenuLoteria) {
 				controller.setTipoEscalonamento(TipoEscalonamento.LOTERIA);
+				Observer.getInstance().atualizarPainelProcessos();
 			}
 		}
 
