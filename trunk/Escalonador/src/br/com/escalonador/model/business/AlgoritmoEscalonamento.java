@@ -19,5 +19,7 @@ public interface AlgoritmoEscalonamento extends Runnable {
 	 * @throws BusinessException {@link BusinessException}
 	 */
 	void escalonar(List<Processo> listaProcessos) throws BusinessException;
+	
+	void parar();
 
 }

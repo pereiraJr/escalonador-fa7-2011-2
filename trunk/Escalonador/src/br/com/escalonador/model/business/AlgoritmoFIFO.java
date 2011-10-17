@@ -16,6 +16,7 @@ import br.com.escalonador.model.Processo;
 public class AlgoritmoFIFO implements AlgoritmoEscalonamento, Runnable {
 	
 	private List<Processo> listaProcessos;
+	private boolean isToStop = false;
 
 	/* (non-Javadoc)
 	 * @see br.com.escalonador.model.business.AlgoritmoEscalonamento#escalonar(java.util.List)
@@ -35,10 +36,22 @@ public class AlgoritmoFIFO implements AlgoritmoEscalonamento, Runnable {
 			p.start();
 			Observer.getInstance().atualizarPainelProcessos();
 			while(p.getEstado() != Estado.FINALIZADO){
+				if(isToStop){
+					p.interrupt();
+					break;
+				}
 				System.out.println("running");
 			}
 			Observer.getInstance().atualizarPainelProcessos();
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see br.com.escalonador.model.business.AlgoritmoEscalonamento#stop()
+	 */
+	@Override
+	public void parar() {
+		isToStop = true;
 	}
 
 }
