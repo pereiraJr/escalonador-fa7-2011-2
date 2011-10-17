@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -70,11 +72,12 @@ public class MainPainel extends JPanel {
 		setVisible(true);
 	}
 	public void atualizarPainelProcessos(){
+		int abaSelecionada = abaPane.getSelectedIndex();
 		setVisible(false);
 		this.removeAll();
 		setLayout(new BorderLayout());
 		add(getManiPainel(), BorderLayout.CENTER);
-		abaPane.setSelectedIndex(1);
+		abaPane.setSelectedIndex(abaSelecionada);
 		setVisible(true);
 	}
 
@@ -162,10 +165,6 @@ public class MainPainel extends JPanel {
 
 	private Component getPainelExecucao() {
 		JPanel painelExecucao = new JPanel();
-//		painelExecucao.setLayout(new BorderLayout());
-//		painelExecucao.add(getPainelMemoria(), BorderLayout.NORTH);
-//		painelExecucao.add(getPainelStatus(), BorderLayout.CENTER);
-//		painelExecucao.add(getPainelInfo(), BorderLayout.EAST);
 		painelExecucao.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -178,12 +177,12 @@ public class MainPainel extends JPanel {
 		c.gridy = 0;
 		painelExecucao.add(getPainelBotoesExecucao(), c);
 		c.gridwidth = 3;
-		c.ipady = 30;
+		c.ipady = 100;
 		c.gridx = 0;
 		c.gridy = 1;
 		painelExecucao.add(getPainelMemoria(), c);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 350;
+		c.ipady = 380;
 		c.ipadx = 650;
 		c.gridwidth = 2;
 		c.gridx = 0;
@@ -200,16 +199,18 @@ public class MainPainel extends JPanel {
 
 	private Component getPainelBotoesExecucao() {
 		JPanel painel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		btIniciar = new JButton(MessagesResource.getString("janela.aba.execucao.botoes.start"));
-//		btIniciar.seti
+		btIniciar = new JButton();
+		btIniciar.setPreferredSize(new Dimension(26, 26));
+		btIniciar.setBorderPainted(false);
+		btIniciar.setIcon(new ImageIcon(getClass().getResource("/br/com/escalonador/resources/imagens/play.png")));
 		btIniciar.addActionListener(new OuvinteBotoes());
 		painel.add(btIniciar);
 		painel.add(new JLabel(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo")));
 		ButtonGroup buttonGroup = new ButtonGroup();
-		jrbFIFO = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.fifo"), true);
+		jrbFIFO = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.fifo"), controller.isAlgoritmoFifo());
 		jrbFIFO.addActionListener(new OuvinteTipoAlgoritmo());
 		buttonGroup.add(jrbFIFO);
-		jrbLoteria = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.loteria"));
+		jrbLoteria = new JRadioButton(MessagesResource.getString("janela.aba.execucao.botoes.algoritmo.loteria"), controller.isAlgoritmoLoteria());
 		jrbLoteria.addActionListener(new OuvinteTipoAlgoritmo());
 		buttonGroup.add(jrbLoteria);
 		painel.add(jrbFIFO);
@@ -248,7 +249,7 @@ public class MainPainel extends JPanel {
 	
 
 	private Component getPainelMemoria() {
-		painelMemoria = new JPanel();
+		painelMemoria = new PainelMemoria(controller.getListProcessos());
 		painelMemoria.setBorder(BorderFactory.createTitledBorder(MessagesResource.getString("janela.aba.execucao.titulo.painel.memoria")));
 		return painelMemoria;
 	}
@@ -349,9 +350,11 @@ public class MainPainel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == jrbFIFO) {
 				controller.setTipoEscalonamento(TipoEscalonamento.FIFO);
+				Observer.getInstance().atualizarPainelProcessos();
 			}
 			if(e.getSource() == jrbLoteria) {
 				controller.setTipoEscalonamento(TipoEscalonamento.LOTERIA);
+				Observer.getInstance().atualizarPainelProcessos();
 			}
 		}
 

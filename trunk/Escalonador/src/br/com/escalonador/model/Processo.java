@@ -3,8 +3,10 @@
  */
 package br.com.escalonador.model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,6 +32,7 @@ public class Processo extends Thread{
 	private List<Integer> listaBilhetes;
 	private boolean pausado;
 	private Lock lockObject;
+	private Color color;
 	
 	
 	
@@ -52,6 +55,8 @@ public class Processo extends Thread{
 		listaBilhetes = new ArrayList<Integer>();
 		pausado = false;
 		lockObject =  new ReentrantLock(true);
+		Random random = new Random(System.currentTimeMillis());
+		color = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 	}
 	
 	
@@ -77,6 +82,8 @@ public class Processo extends Thread{
 		setEstado(estado);
 		listaBilhetes = new ArrayList<Integer>();
 		pausado = false;
+		Random random = new Random(System.currentTimeMillis());
+		color = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 	}
 
 
@@ -149,6 +156,14 @@ public class Processo extends Thread{
 	public final void setListaBilhetes(List<Integer> listaBilhetes) {
 		this.listaBilhetes = listaBilhetes;
 	}
+	/**
+	 * @return the color
+	 */
+	public final Color getColor() {
+		return color;
+	}
+
+
 
 	public long getTempoRestante() {
 		return tempoRestante - horaReferencia;

@@ -20,7 +20,7 @@ public class Controller {
 	private static Controller controller =null;
 	private TipoEscalonamento tipoEscalonamento;
 	private List<Processo> listProcessos;
-	private int pidCounter = 0;
+	private int pidCounter = 1;
 
 	/**
 	 * Construtor.
@@ -167,6 +167,22 @@ public class Controller {
 			}
 		}
 		return tempoTotal;
+	}
+	
+	public boolean isAlgoritmoFifo(){
+		boolean retorno = false;
+		if(tipoEscalonamento == TipoEscalonamento.FIFO) {
+			retorno = true;
+		}
+		return retorno;
+	}
+	
+	public boolean isAlgoritmoLoteria(){
+		boolean retorno = false;
+		if(tipoEscalonamento == TipoEscalonamento.LOTERIA) {
+			retorno = true;
+		}
+		return retorno;
 	}
 	
 	public String getLabelAlgoritmo(){

@@ -41,9 +41,4 @@ public class AlgoritmoFIFO implements AlgoritmoEscalonamento, Runnable {
 		}
 	}
 
-	private void doSathing() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
