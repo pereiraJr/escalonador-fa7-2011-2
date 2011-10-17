@@ -21,6 +21,7 @@ public class Controller {
 	private TipoEscalonamento tipoEscalonamento;
 	private List<Processo> listProcessos;
 	private int pidCounter = 1;
+	private AlgoritmoEscalonamento algoritmo;
 
 	/**
 	 * Construtor.
@@ -65,7 +66,6 @@ public class Controller {
 		Thread d = new Thread() {
 			public void run() {
 				try {
-					AlgoritmoEscalonamento algoritmo = null;
 					switch (tipoEscalonamento) {
 					case FIFO:
 						algoritmo = new AlgoritmoFIFO();

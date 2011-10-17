@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -143,8 +144,37 @@ public class ProcessoWindow extends JFrame implements ActionListener{
 	}
 
 	private boolean isCamposValidos() {
-		// TODO Auto-generated method stub
-		return true;
+		boolean isValido = true;
+		StringBuffer msgError = new StringBuffer();
+		String tempo = qtdTempo.getText();
+		String quantidadeMemoria = qtdMenmoria.getText();
+		if(tempo == null || tempo.equals("")){
+			isValido = false;
+			msgError.append("O tempo de processamento é um campo obrigatório.\n");
+		} else {
+			try{
+				Integer.parseInt(tempo);
+			} catch(NumberFormatException e) {
+				isValido = false;
+				msgError.append("Valor inválido para o tempo de processamento.\n");
+			}
+		}
+		if(quantidadeMemoria == null || quantidadeMemoria.equals("")){
+			isValido = false;
+			msgError.append("A quantidade de memória é um campo obrigatório.\n");
+		} else {
+			try{
+				Integer.parseInt(quantidadeMemoria);
+			} catch(NumberFormatException e) {
+				isValido = false;
+				msgError.append("Valor inválido para a quantidade de memória.\n");
+			}
+		}
+		
+		if(!isValido){
+			JOptionPane.showMessageDialog(null, msgError, "Atenção!", JOptionPane.INFORMATION_MESSAGE);
+		}
+		return isValido;
 	}
 	
 	

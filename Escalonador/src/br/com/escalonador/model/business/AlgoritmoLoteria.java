@@ -22,6 +22,7 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 
 	private List<Processo> processos;
 	private List<Processo> listaProcessos;
+	private boolean isToStop = false;
 
 	@Override
 	public void escalonar(List<Processo> listaProcessos)
@@ -39,6 +40,17 @@ public class AlgoritmoLoteria extends Thread implements AlgoritmoEscalonamento {
 			}
 		}
 		return processo;
+	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see br.com.escalonador.model.business.AlgoritmoEscalonamento#parar()
+	 */
+	@Override
+	public void parar() {
+		isToStop = true;
+		
 	}
 
 	@Override
